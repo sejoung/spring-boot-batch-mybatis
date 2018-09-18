@@ -8,5 +8,9 @@
 		SELECT first_name,last_name
 		FROM people
 	</select>
+	
+	<insert id="insertTest" parameterType="com.github.sejoung.model.Test">
+		insert into people2(first_name,last_name) values (#{first_name,jdbcType=VARCHAR},#{last_name,jdbcType=VARCHAR})
+	</insert>
 
 </mapper>

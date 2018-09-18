@@ -5,6 +5,8 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.batch.MyBatisPagingItemReader;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -15,10 +17,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.github.sejoung.model.Test;
+
 @Configuration
 public class ADBConfiguration {
 
-    @Bean(name="adbDatasource")
+    @Bean(name = "adbDatasource")
     @Primary
     @ConfigurationProperties(prefix = "spring.adb.datasource")
     public DataSource mysqlDataSource() {
@@ -41,11 +45,21 @@ public class ADBConfiguration {
         SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
         return sqlSessionTemplate;
     }
-    
+
     @Primary
     @Bean(name = "aTX")
     public PlatformTransactionManager ProductTransactionManager(@Qualifier("adbDatasource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
+
+    @Bean(name ="myBatisPagingItemReader")
+    @StepScope
+    public MyBatisPagingItemReader<Test> adbRead(@Qualifier("sqlSessionAdbFactory") SqlSessionFactory sqlSessionFactory) {
+        MyBatisPagingItemReader<Test> myBatisPagingItemReader = new MyBatisPagingItemReader<Test>();
+        myBatisPagingItemReader.setQueryId("selectTest2");
+        myBatisPagingItemReader.setSqlSessionFactory(sqlSessionFactory);
+        return myBatisPagingItemReader;
+    }
+    
 
 }

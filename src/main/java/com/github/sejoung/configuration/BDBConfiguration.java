@@ -5,6 +5,8 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.batch.MyBatisBatchItemWriter;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -14,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import com.github.sejoung.model.Test;
 
 @Configuration
 public class BDBConfiguration {
@@ -30,7 +34,7 @@ public class BDBConfiguration {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(datasorce);
         factoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
-        factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mybatis/a/*.xml"));
+        factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mybatis/b/*.xml"));
         return factoryBean.getObject();
     }
 
@@ -47,4 +51,12 @@ public class BDBConfiguration {
         return new DataSourceTransactionManager(dataSource);
     }
 
+    @Bean(name ="myBatisBatchItemWriter")
+    @StepScope
+    public MyBatisBatchItemWriter<Test> writer(@Qualifier("sqlSessionBdbFactory")SqlSessionFactory sqlSessionFactory){
+        MyBatisBatchItemWriter<Test> myBatisBatchItemWriter = new MyBatisBatchItemWriter<Test>();
+        myBatisBatchItemWriter.setSqlSessionFactory(sqlSessionFactory);
+        myBatisBatchItemWriter.setStatementId("insertTest");
+        return myBatisBatchItemWriter;
+    }
 }

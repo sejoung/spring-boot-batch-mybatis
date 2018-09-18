@@ -8,5 +8,9 @@
 		SELECT first_name,last_name
 		FROM people
 	</select>
-
+	
+	<select id="selectTest2" parameterType="hashmap"	resultType="com.github.sejoung.model.Test">
+		SELECT first_name,last_name
+		FROM people limit #{_skiprows,jdbcType=INTEGER},#{_pagesize,jdbcType=INTEGER}
+	</select>
 </mapper>
