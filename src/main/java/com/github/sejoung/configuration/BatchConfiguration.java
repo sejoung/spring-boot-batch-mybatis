@@ -32,7 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class BatchConfiguration extends DefaultBatchConfigurer {
-    
+/*
+
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
 
@@ -44,13 +45,14 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
 
     @Autowired
     public BDao bDao;
+*/
 
     /* (non-Javadoc)
      * @see org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer#setDataSource(javax.sql.DataSource)
      * 
      * 스프링 배치에서 배치 정보를 저장하는 DB를 사용하지 않을려고 데이터 소스를 set 하는 부분을 주석 처리함
      * 
-     */  
+     */
     @Override
     public void setDataSource(DataSource dataSource) {
     }
@@ -69,7 +71,7 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
     public JobCompletionNotificationListener jobExecutionListener() {
         return new JobCompletionNotificationListener();
     }
-
+    /*
     @Bean
     public Job importUserJob(JobCompletionNotificationListener listener, Step step1, Step step2) {
         return jobBuilderFactory.get("testJob").incrementer(new CurrentTimeIncrementer()).listener(listener).flow(step1).next(step2).end().build();
@@ -110,5 +112,5 @@ public class BatchConfiguration extends DefaultBatchConfigurer {
             return RepeatStatus.FINISHED;
         };
     }
-    
+    */
 }
