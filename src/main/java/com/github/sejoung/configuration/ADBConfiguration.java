@@ -58,6 +58,7 @@ public class ADBConfiguration {
         MyBatisPagingItemReader<Test> myBatisPagingItemReader = new MyBatisPagingItemReader<Test>();
         myBatisPagingItemReader.setQueryId("selectTest2");
         myBatisPagingItemReader.setSqlSessionFactory(sqlSessionFactory);
+        myBatisPagingItemReader.setPageSize(10);
         return myBatisPagingItemReader;
     }
     
